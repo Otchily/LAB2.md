@@ -28,8 +28,6 @@ O compilador lê arquivos `.pas` e produz:
 - `src/runtime.c`: runtime de suporte para I/O e argumentos
 - `tests/*.pas`: programas obrigatórios
 - `tests/out/`: executáveis e artefatos gerados
-- `docs/TUTORIAL_COMPLETO.md`: tutorial detalhado
-- `docs/RELATORIO_FINAL.md`: relatório de entrega
 - `artifacts/`: evidências e logs
 
 ## Requisitos atendidos
