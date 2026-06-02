@@ -69,4 +69,4 @@ bash scripts/run_tests.sh
 ## Observações
 - O compilador foi validado em ambiente Linux x86-64.
 - O programa `pidigits.pas` usa uma aproximação inteira de π limitada a 9 casas decimais para evitar overflow em `int64`.
-- Antes da entrega final no GitHub/MS Teams, recomenda-se revisar nomes, screenshots e commit final.
+  
