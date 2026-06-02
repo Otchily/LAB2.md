@@ -1,0 +1,2169 @@
+Terminals unused in grammar
+
+    TREAD
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: TPROGRAM TIDENT TSEMI global_vars_opt functions_opt compound_stmt TDOT
+
+    2 global_vars_opt: %empty
+    3                | var_sections
+
+    4 var_sections: TVAR var_decl_list
+    5             | var_sections TVAR var_decl_list
+
+    6 var_decl_list: ident_list TCOLON type_spec TSEMI
+    7              | var_decl_list ident_list TCOLON type_spec TSEMI
+
+    8 functions_opt: %empty
+    9              | functions_opt function_decl
+   10              | functions_opt procedure_decl
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN TCOLON type_spec TSEMI local_vars_opt compound_stmt TSEMI
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN params_opt TRPAREN TSEMI local_vars_opt compound_stmt TSEMI
+
+   13 local_vars_opt: %empty
+   14               | var_sections
+
+   15 params_opt: %empty
+   16           | param_list
+
+   17 param_list: TIDENT TCOLON type_spec
+   18           | param_list TCOMMA TIDENT TCOLON type_spec
+
+   19 type_spec: TINTEGER
+   20          | TBOOLEAN
+
+   21 compound_stmt: TBEGIN stmt_list_opt TEND
+
+   22 stmt_list_opt: %empty
+   23              | stmt_list
+
+   24 stmt_list: statement
+   25          | stmt_list TSEMI statement
+
+   26 statement: assignment_stmt
+   27          | if_stmt
+   28          | while_stmt
+   29          | for_stmt
+   30          | return_stmt
+   31          | write_stmt
+   32          | expr_stmt
+   33          | compound_stmt
+
+   34 assignment_stmt: TIDENT TASSIGN expr
+
+   35 if_stmt: TIF expr TTHEN statement
+   36        | TIF expr TTHEN statement TELSE statement
+
+   37 while_stmt: TWHILE expr TDO statement
+
+   38 for_stmt: TFOR TIDENT TASSIGN expr TTO expr TDO statement
+
+   39 return_stmt: TRETURN
+   40            | TRETURN expr
+
+   41 write_stmt: TWRITE TLPAREN write_args_opt TRPAREN
+   42           | TWRITELN TLPAREN write_args_opt TRPAREN
+   43           | TWRITELN
+
+   44 expr_stmt: function_call
+
+   45 write_args_opt: %empty
+   46               | write_args
+
+   47 write_args: expr
+   48           | TSTRING
+   49           | write_args TCOMMA expr
+   50           | write_args TCOMMA TSTRING
+
+   51 expr: expr TOR relation
+   52     | expr TAND relation
+   53     | relation
+
+   54 relation: arith TEQ arith
+   55         | arith TNE arith
+   56         | arith TLT arith
+   57         | arith TLE arith
+   58         | arith TGT arith
+   59         | arith TGE arith
+   60         | arith
+
+   61 arith: arith TPLUS term
+   62      | arith TMINUS term
+   63      | term
+
+   64 term: term TMUL unary
+   65     | term TDIV unary
+   66     | term TMOD unary
+   67     | unary
+
+   68 unary: TMINUS unary
+   69      | TPLUS unary
+   70      | TNOT unary
+   71      | factor
+
+   72 factor: TINTLIT
+   73       | TTRUE
+   74       | TFALSE
+   75       | TIDENT
+   76       | function_call
+   77       | TLPAREN expr TRPAREN
+
+   78 function_call: TIDENT TLPAREN expr_list_opt TRPAREN
+
+   79 expr_list_opt: %empty
+   80              | expr_list
+
+   81 expr_list: expr
+   82          | expr_list TCOMMA expr
+
+   83 ident_list: TIDENT
+   84           | ident_list TCOMMA TIDENT
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    TPROGRAM (258) 1
+    TVAR (259) 4 5
+    TBEGIN (260) 21
+    TEND (261) 21
+    TIF (262) 35 36
+    TTHEN (263) 35 36
+    TELSE (264) 36
+    TWHILE (265) 37
+    TDO (266) 37 38
+    TFOR (267) 38
+    TTO (268) 38
+    TRETURN (269) 39 40
+    TPROCEDURE (270) 12
+    TFUNCTION (271) 11
+    TINTEGER (272) 19
+    TBOOLEAN (273) 20
+    TTRUE (274) 73
+    TFALSE (275) 74
+    TAND (276) 52
+    TOR (277) 51
+    TNOT (278) 70
+    TDIV (279) 65
+    TMOD (280) 66
+    TWRITE (281) 41
+    TWRITELN (282) 42 43
+    TREAD (283)
+    TASSIGN (284) 34 38
+    TNE (285) 55
+    TLE (286) 57
+    TGE (287) 59
+    TLT (288) 56
+    TGT (289) 58
+    TEQ (290) 54
+    TCOLON (291) 6 7 11 17 18
+    TSEMI (292) 1 6 7 11 12 25
+    TDOT (293) 1
+    TCOMMA (294) 18 49 50 82 84
+    TLPAREN (295) 11 12 41 42 77 78
+    TRPAREN (296) 11 12 41 42 77 78
+    TPLUS (297) 61 69
+    TMINUS (298) 62 68
+    TMUL (299) 64
+    TINTLIT <ival> (300) 72
+    TIDENT <sval> (301) 1 11 12 17 18 34 38 75 78 83 84
+    TSTRING <sval> (302) 48 50
+    LOWER_THAN_ELSE (303)
+    UMINUS (304)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (50)
+        on left: 0
+    program <program> (51)
+        on left: 1
+        on right: 0
+    global_vars_opt <stmt_list> (52)
+        on left: 2 3
+        on right: 1
+    var_sections <stmt_list> (53)
+        on left: 4 5
+        on right: 3 5 14
+    var_decl_list <stmt_list> (54)
+        on left: 6 7
+        on right: 4 5 7
+    functions_opt <func_list> (55)
+        on left: 8 9 10
+        on right: 1 9 10
+    function_decl <func> (56)
+        on left: 11
+        on right: 9
+    procedure_decl <func> (57)
+        on left: 12
+        on right: 10
+    local_vars_opt <stmt_list> (58)
+        on left: 13 14
+        on right: 11 12
+    params_opt <param_list> (59)
+        on left: 15 16
+        on right: 11 12
+    param_list <param_list> (60)
+        on left: 17 18
+        on right: 16 18
+    type_spec <type> (61)
+        on left: 19 20
+        on right: 6 7 11 17 18
+    compound_stmt <block> (62)
+        on left: 21
+        on right: 1 11 12 33
+    stmt_list_opt <stmt_list> (63)
+        on left: 22 23
+        on right: 21
+    stmt_list <stmt_list> (64)
+        on left: 24 25
+        on right: 23 25
+    statement <stmt> (65)
+        on left: 26 27 28 29 30 31 32 33
+        on right: 24 25 35 36 37 38
+    assignment_stmt <stmt> (66)
+        on left: 34
+        on right: 26
+    if_stmt <stmt> (67)
+        on left: 35 36
+        on right: 27
+    while_stmt <stmt> (68)
+        on left: 37
+        on right: 28
+    for_stmt <stmt> (69)
+        on left: 38
+        on right: 29
+    return_stmt <stmt> (70)
+        on left: 39 40
+        on right: 30
+    write_stmt <stmt> (71)
+        on left: 41 42 43
+        on right: 31
+    expr_stmt <stmt> (72)
+        on left: 44
+        on right: 32
+    write_args_opt <expr_list> (73)
+        on left: 45 46
+        on right: 41 42
+    write_args <expr_list> (74)
+        on left: 47 48 49 50
+        on right: 46 49 50
+    expr <expr> (75)
+        on left: 51 52 53
+        on right: 34 35 36 37 38 40 47 49 51 52 77 81 82
+    relation <expr> (76)
+        on left: 54 55 56 57 58 59 60
+        on right: 51 52 53
+    arith <expr> (77)
+        on left: 61 62 63
+        on right: 54 55 56 57 58 59 60 61 62
+    term <expr> (78)
+        on left: 64 65 66 67
+        on right: 61 62 63 64 65 66
+    unary <expr> (79)
+        on left: 68 69 70 71
+        on right: 64 65 66 67 68 69 70
+    factor <expr> (80)
+        on left: 72 73 74 75 76 77
+        on right: 71
+    function_call <expr> (81)
+        on left: 78
+        on right: 44 76
+    expr_list_opt <expr_list> (82)
+        on left: 79 80
+        on right: 78
+    expr_list <expr_list> (83)
+        on left: 81 82
+        on right: 80 82
+    ident_list <name_list> (84)
+        on left: 83 84
+        on right: 6 7 84
+
+
+State 0
+
+    0 $accept: . program $end
+
+    TPROGRAM  shift, and go to state 1
+
+    program  go to state 2
+
+
+State 1
+
+    1 program: TPROGRAM . TIDENT TSEMI global_vars_opt functions_opt compound_stmt TDOT
+
+    TIDENT  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 program: TPROGRAM TIDENT . TSEMI global_vars_opt functions_opt compound_stmt TDOT
+
+    TSEMI  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 5
+
+    1 program: TPROGRAM TIDENT TSEMI . global_vars_opt functions_opt compound_stmt TDOT
+
+    TVAR  shift, and go to state 6
+
+    $default  reduce using rule 2 (global_vars_opt)
+
+    global_vars_opt  go to state 7
+    var_sections     go to state 8
+
+
+State 6
+
+    4 var_sections: TVAR . var_decl_list
+
+    TIDENT  shift, and go to state 9
+
+    var_decl_list  go to state 10
+    ident_list     go to state 11
+
+
+State 7
+
+    1 program: TPROGRAM TIDENT TSEMI global_vars_opt . functions_opt compound_stmt TDOT
+
+    $default  reduce using rule 8 (functions_opt)
+
+    functions_opt  go to state 12
+
+
+State 8
+
+    3 global_vars_opt: var_sections .
+    5 var_sections: var_sections . TVAR var_decl_list
+
+    TVAR  shift, and go to state 13
+
+    $default  reduce using rule 3 (global_vars_opt)
+
+
+State 9
+
+   83 ident_list: TIDENT .
+
+    $default  reduce using rule 83 (ident_list)
+
+
+State 10
+
+    4 var_sections: TVAR var_decl_list .
+    7 var_decl_list: var_decl_list . ident_list TCOLON type_spec TSEMI
+
+    TIDENT  shift, and go to state 9
+
+    $default  reduce using rule 4 (var_sections)
+
+    ident_list  go to state 14
+
+
+State 11
+
+    6 var_decl_list: ident_list . TCOLON type_spec TSEMI
+   84 ident_list: ident_list . TCOMMA TIDENT
+
+    TCOLON  shift, and go to state 15
+    TCOMMA  shift, and go to state 16
+
+
+State 12
+
+    1 program: TPROGRAM TIDENT TSEMI global_vars_opt functions_opt . compound_stmt TDOT
+    9 functions_opt: functions_opt . function_decl
+   10              | functions_opt . procedure_decl
+
+    TBEGIN      shift, and go to state 17
+    TPROCEDURE  shift, and go to state 18
+    TFUNCTION   shift, and go to state 19
+
+    function_decl   go to state 20
+    procedure_decl  go to state 21
+    compound_stmt   go to state 22
+
+
+State 13
+
+    5 var_sections: var_sections TVAR . var_decl_list
+
+    TIDENT  shift, and go to state 9
+
+    var_decl_list  go to state 23
+    ident_list     go to state 11
+
+
+State 14
+
+    7 var_decl_list: var_decl_list ident_list . TCOLON type_spec TSEMI
+   84 ident_list: ident_list . TCOMMA TIDENT
+
+    TCOLON  shift, and go to state 24
+    TCOMMA  shift, and go to state 16
+
+
+State 15
+
+    6 var_decl_list: ident_list TCOLON . type_spec TSEMI
+
+    TINTEGER  shift, and go to state 25
+    TBOOLEAN  shift, and go to state 26
+
+    type_spec  go to state 27
+
+
+State 16
+
+   84 ident_list: ident_list TCOMMA . TIDENT
+
+    TIDENT  shift, and go to state 28
+
+
+State 17
+
+   21 compound_stmt: TBEGIN . stmt_list_opt TEND
+
+    TBEGIN    shift, and go to state 17
+    TIF       shift, and go to state 29
+    TWHILE    shift, and go to state 30
+    TFOR      shift, and go to state 31
+    TRETURN   shift, and go to state 32
+    TWRITE    shift, and go to state 33
+    TWRITELN  shift, and go to state 34
+    TIDENT    shift, and go to state 35
+
+    $default  reduce using rule 22 (stmt_list_opt)
+
+    compound_stmt    go to state 36
+    stmt_list_opt    go to state 37
+    stmt_list        go to state 38
+    statement        go to state 39
+    assignment_stmt  go to state 40
+    if_stmt          go to state 41
+    while_stmt       go to state 42
+    for_stmt         go to state 43
+    return_stmt      go to state 44
+    write_stmt       go to state 45
+    expr_stmt        go to state 46
+    function_call    go to state 47
+
+
+State 18
+
+   12 procedure_decl: TPROCEDURE . TIDENT TLPAREN params_opt TRPAREN TSEMI local_vars_opt compound_stmt TSEMI
+
+    TIDENT  shift, and go to state 48
+
+
+State 19
+
+   11 function_decl: TFUNCTION . TIDENT TLPAREN params_opt TRPAREN TCOLON type_spec TSEMI local_vars_opt compound_stmt TSEMI
+
+    TIDENT  shift, and go to state 49
+
+
+State 20
+
+    9 functions_opt: functions_opt function_decl .
+
+    $default  reduce using rule 9 (functions_opt)
+
+
+State 21
+
+   10 functions_opt: functions_opt procedure_decl .
+
+    $default  reduce using rule 10 (functions_opt)
+
+
+State 22
+
+    1 program: TPROGRAM TIDENT TSEMI global_vars_opt functions_opt compound_stmt . TDOT
+
+    TDOT  shift, and go to state 50
+
+
+State 23
+
+    5 var_sections: var_sections TVAR var_decl_list .
+    7 var_decl_list: var_decl_list . ident_list TCOLON type_spec TSEMI
+
+    TIDENT  shift, and go to state 9
+
+    $default  reduce using rule 5 (var_sections)
+
+    ident_list  go to state 14
+
+
+State 24
+
+    7 var_decl_list: var_decl_list ident_list TCOLON . type_spec TSEMI
+
+    TINTEGER  shift, and go to state 25
+    TBOOLEAN  shift, and go to state 26
+
+    type_spec  go to state 51
+
+
+State 25
+
+   19 type_spec: TINTEGER .
+
+    $default  reduce using rule 19 (type_spec)
+
+
+State 26
+
+   20 type_spec: TBOOLEAN .
+
+    $default  reduce using rule 20 (type_spec)
+
+
+State 27
+
+    6 var_decl_list: ident_list TCOLON type_spec . TSEMI
+
+    TSEMI  shift, and go to state 52
+
+
+State 28
+
+   84 ident_list: ident_list TCOMMA TIDENT .
+
+    $default  reduce using rule 84 (ident_list)
+
+
+State 29
+
+   35 if_stmt: TIF . expr TTHEN statement
+   36        | TIF . expr TTHEN statement TELSE statement
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    expr           go to state 61
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 30
+
+   37 while_stmt: TWHILE . expr TDO statement
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    expr           go to state 68
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 31
+
+   38 for_stmt: TFOR . TIDENT TASSIGN expr TTO expr TDO statement
+
+    TIDENT  shift, and go to state 69
+
+
+State 32
+
+   39 return_stmt: TRETURN .
+   40            | TRETURN . expr
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    $default  reduce using rule 39 (return_stmt)
+
+    expr           go to state 70
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 33
+
+   41 write_stmt: TWRITE . TLPAREN write_args_opt TRPAREN
+
+    TLPAREN  shift, and go to state 71
+
+
+State 34
+
+   42 write_stmt: TWRITELN . TLPAREN write_args_opt TRPAREN
+   43           | TWRITELN .
+
+    TLPAREN  shift, and go to state 72
+
+    $default  reduce using rule 43 (write_stmt)
+
+
+State 35
+
+   34 assignment_stmt: TIDENT . TASSIGN expr
+   78 function_call: TIDENT . TLPAREN expr_list_opt TRPAREN
+
+    TASSIGN  shift, and go to state 73
+    TLPAREN  shift, and go to state 74
+
+
+State 36
+
+   33 statement: compound_stmt .
+
+    $default  reduce using rule 33 (statement)
+
+
+State 37
+
+   21 compound_stmt: TBEGIN stmt_list_opt . TEND
+
+    TEND  shift, and go to state 75
+
+
+State 38
+
+   23 stmt_list_opt: stmt_list .
+   25 stmt_list: stmt_list . TSEMI statement
+
+    TSEMI  shift, and go to state 76
+
+    $default  reduce using rule 23 (stmt_list_opt)
+
+
+State 39
+
+   24 stmt_list: statement .
+
+    $default  reduce using rule 24 (stmt_list)
+
+
+State 40
+
+   26 statement: assignment_stmt .
+
+    $default  reduce using rule 26 (statement)
+
+
+State 41
+
+   27 statement: if_stmt .
+
+    $default  reduce using rule 27 (statement)
+
+
+State 42
+
+   28 statement: while_stmt .
+
+    $default  reduce using rule 28 (statement)
+
+
+State 43
+
+   29 statement: for_stmt .
+
+    $default  reduce using rule 29 (statement)
+
+
+State 44
+
+   30 statement: return_stmt .
+
+    $default  reduce using rule 30 (statement)
+
+
+State 45
+
+   31 statement: write_stmt .
+
+    $default  reduce using rule 31 (statement)
+
+
+State 46
+
+   32 statement: expr_stmt .
+
+    $default  reduce using rule 32 (statement)
+
+
+State 47
+
+   44 expr_stmt: function_call .
+
+    $default  reduce using rule 44 (expr_stmt)
+
+
+State 48
+
+   12 procedure_decl: TPROCEDURE TIDENT . TLPAREN params_opt TRPAREN TSEMI local_vars_opt compound_stmt TSEMI
+
+    TLPAREN  shift, and go to state 77
+
+
+State 49
+
+   11 function_decl: TFUNCTION TIDENT . TLPAREN params_opt TRPAREN TCOLON type_spec TSEMI local_vars_opt compound_stmt TSEMI
+
+    TLPAREN  shift, and go to state 78
+
+
+State 50
+
+    1 program: TPROGRAM TIDENT TSEMI global_vars_opt functions_opt compound_stmt TDOT .
+
+    $default  reduce using rule 1 (program)
+
+
+State 51
+
+    7 var_decl_list: var_decl_list ident_list TCOLON type_spec . TSEMI
+
+    TSEMI  shift, and go to state 79
+
+
+State 52
+
+    6 var_decl_list: ident_list TCOLON type_spec TSEMI .
+
+    $default  reduce using rule 6 (var_decl_list)
+
+
+State 53
+
+   73 factor: TTRUE .
+
+    $default  reduce using rule 73 (factor)
+
+
+State 54
+
+   74 factor: TFALSE .
+
+    $default  reduce using rule 74 (factor)
+
+
+State 55
+
+   70 unary: TNOT . unary
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    unary          go to state 80
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 56
+
+   77 factor: TLPAREN . expr TRPAREN
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    expr           go to state 81
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 57
+
+   69 unary: TPLUS . unary
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    unary          go to state 82
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 58
+
+   68 unary: TMINUS . unary
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    unary          go to state 83
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 59
+
+   72 factor: TINTLIT .
+
+    $default  reduce using rule 72 (factor)
+
+
+State 60
+
+   75 factor: TIDENT .
+   78 function_call: TIDENT . TLPAREN expr_list_opt TRPAREN
+
+    TLPAREN  shift, and go to state 74
+
+    $default  reduce using rule 75 (factor)
+
+
+State 61
+
+   35 if_stmt: TIF expr . TTHEN statement
+   36        | TIF expr . TTHEN statement TELSE statement
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TTHEN  shift, and go to state 84
+    TAND   shift, and go to state 85
+    TOR    shift, and go to state 86
+
+
+State 62
+
+   53 expr: relation .
+
+    $default  reduce using rule 53 (expr)
+
+
+State 63
+
+   54 relation: arith . TEQ arith
+   55         | arith . TNE arith
+   56         | arith . TLT arith
+   57         | arith . TLE arith
+   58         | arith . TGT arith
+   59         | arith . TGE arith
+   60         | arith .
+   61 arith: arith . TPLUS term
+   62      | arith . TMINUS term
+
+    TNE     shift, and go to state 87
+    TLE     shift, and go to state 88
+    TGE     shift, and go to state 89
+    TLT     shift, and go to state 90
+    TGT     shift, and go to state 91
+    TEQ     shift, and go to state 92
+    TPLUS   shift, and go to state 93
+    TMINUS  shift, and go to state 94
+
+    $default  reduce using rule 60 (relation)
+
+
+State 64
+
+   63 arith: term .
+   64 term: term . TMUL unary
+   65     | term . TDIV unary
+   66     | term . TMOD unary
+
+    TDIV  shift, and go to state 95
+    TMOD  shift, and go to state 96
+    TMUL  shift, and go to state 97
+
+    $default  reduce using rule 63 (arith)
+
+
+State 65
+
+   67 term: unary .
+
+    $default  reduce using rule 67 (term)
+
+
+State 66
+
+   71 unary: factor .
+
+    $default  reduce using rule 71 (unary)
+
+
+State 67
+
+   76 factor: function_call .
+
+    $default  reduce using rule 76 (factor)
+
+
+State 68
+
+   37 while_stmt: TWHILE expr . TDO statement
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TDO   shift, and go to state 98
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+
+State 69
+
+   38 for_stmt: TFOR TIDENT . TASSIGN expr TTO expr TDO statement
+
+    TASSIGN  shift, and go to state 99
+
+
+State 70
+
+   40 return_stmt: TRETURN expr .
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+    $default  reduce using rule 40 (return_stmt)
+
+
+State 71
+
+   41 write_stmt: TWRITE TLPAREN . write_args_opt TRPAREN
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+    TSTRING  shift, and go to state 100
+
+    $default  reduce using rule 45 (write_args_opt)
+
+    write_args_opt  go to state 101
+    write_args      go to state 102
+    expr            go to state 103
+    relation        go to state 62
+    arith           go to state 63
+    term            go to state 64
+    unary           go to state 65
+    factor          go to state 66
+    function_call   go to state 67
+
+
+State 72
+
+   42 write_stmt: TWRITELN TLPAREN . write_args_opt TRPAREN
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+    TSTRING  shift, and go to state 100
+
+    $default  reduce using rule 45 (write_args_opt)
+
+    write_args_opt  go to state 104
+    write_args      go to state 102
+    expr            go to state 103
+    relation        go to state 62
+    arith           go to state 63
+    term            go to state 64
+    unary           go to state 65
+    factor          go to state 66
+    function_call   go to state 67
+
+
+State 73
+
+   34 assignment_stmt: TIDENT TASSIGN . expr
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    expr           go to state 105
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 74
+
+   78 function_call: TIDENT TLPAREN . expr_list_opt TRPAREN
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    $default  reduce using rule 79 (expr_list_opt)
+
+    expr           go to state 106
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+    expr_list_opt  go to state 107
+    expr_list      go to state 108
+
+
+State 75
+
+   21 compound_stmt: TBEGIN stmt_list_opt TEND .
+
+    $default  reduce using rule 21 (compound_stmt)
+
+
+State 76
+
+   25 stmt_list: stmt_list TSEMI . statement
+
+    TBEGIN    shift, and go to state 17
+    TIF       shift, and go to state 29
+    TWHILE    shift, and go to state 30
+    TFOR      shift, and go to state 31
+    TRETURN   shift, and go to state 32
+    TWRITE    shift, and go to state 33
+    TWRITELN  shift, and go to state 34
+    TIDENT    shift, and go to state 35
+
+    compound_stmt    go to state 36
+    statement        go to state 109
+    assignment_stmt  go to state 40
+    if_stmt          go to state 41
+    while_stmt       go to state 42
+    for_stmt         go to state 43
+    return_stmt      go to state 44
+    write_stmt       go to state 45
+    expr_stmt        go to state 46
+    function_call    go to state 47
+
+
+State 77
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN . params_opt TRPAREN TSEMI local_vars_opt compound_stmt TSEMI
+
+    TIDENT  shift, and go to state 110
+
+    $default  reduce using rule 15 (params_opt)
+
+    params_opt  go to state 111
+    param_list  go to state 112
+
+
+State 78
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN . params_opt TRPAREN TCOLON type_spec TSEMI local_vars_opt compound_stmt TSEMI
+
+    TIDENT  shift, and go to state 110
+
+    $default  reduce using rule 15 (params_opt)
+
+    params_opt  go to state 113
+    param_list  go to state 112
+
+
+State 79
+
+    7 var_decl_list: var_decl_list ident_list TCOLON type_spec TSEMI .
+
+    $default  reduce using rule 7 (var_decl_list)
+
+
+State 80
+
+   70 unary: TNOT unary .
+
+    $default  reduce using rule 70 (unary)
+
+
+State 81
+
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+   77 factor: TLPAREN expr . TRPAREN
+
+    TAND     shift, and go to state 85
+    TOR      shift, and go to state 86
+    TRPAREN  shift, and go to state 114
+
+
+State 82
+
+   69 unary: TPLUS unary .
+
+    $default  reduce using rule 69 (unary)
+
+
+State 83
+
+   68 unary: TMINUS unary .
+
+    $default  reduce using rule 68 (unary)
+
+
+State 84
+
+   35 if_stmt: TIF expr TTHEN . statement
+   36        | TIF expr TTHEN . statement TELSE statement
+
+    TBEGIN    shift, and go to state 17
+    TIF       shift, and go to state 29
+    TWHILE    shift, and go to state 30
+    TFOR      shift, and go to state 31
+    TRETURN   shift, and go to state 32
+    TWRITE    shift, and go to state 33
+    TWRITELN  shift, and go to state 34
+    TIDENT    shift, and go to state 35
+
+    compound_stmt    go to state 36
+    statement        go to state 115
+    assignment_stmt  go to state 40
+    if_stmt          go to state 41
+    while_stmt       go to state 42
+    for_stmt         go to state 43
+    return_stmt      go to state 44
+    write_stmt       go to state 45
+    expr_stmt        go to state 46
+    function_call    go to state 47
+
+
+State 85
+
+   52 expr: expr TAND . relation
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    relation       go to state 116
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 86
+
+   51 expr: expr TOR . relation
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    relation       go to state 117
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 87
+
+   55 relation: arith TNE . arith
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    arith          go to state 118
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 88
+
+   57 relation: arith TLE . arith
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    arith          go to state 119
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 89
+
+   59 relation: arith TGE . arith
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    arith          go to state 120
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 90
+
+   56 relation: arith TLT . arith
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    arith          go to state 121
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 91
+
+   58 relation: arith TGT . arith
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    arith          go to state 122
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 92
+
+   54 relation: arith TEQ . arith
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    arith          go to state 123
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 93
+
+   61 arith: arith TPLUS . term
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    term           go to state 124
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 94
+
+   62 arith: arith TMINUS . term
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    term           go to state 125
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 95
+
+   65 term: term TDIV . unary
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    unary          go to state 126
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 96
+
+   66 term: term TMOD . unary
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    unary          go to state 127
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 97
+
+   64 term: term TMUL . unary
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    unary          go to state 128
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 98
+
+   37 while_stmt: TWHILE expr TDO . statement
+
+    TBEGIN    shift, and go to state 17
+    TIF       shift, and go to state 29
+    TWHILE    shift, and go to state 30
+    TFOR      shift, and go to state 31
+    TRETURN   shift, and go to state 32
+    TWRITE    shift, and go to state 33
+    TWRITELN  shift, and go to state 34
+    TIDENT    shift, and go to state 35
+
+    compound_stmt    go to state 36
+    statement        go to state 129
+    assignment_stmt  go to state 40
+    if_stmt          go to state 41
+    while_stmt       go to state 42
+    for_stmt         go to state 43
+    return_stmt      go to state 44
+    write_stmt       go to state 45
+    expr_stmt        go to state 46
+    function_call    go to state 47
+
+
+State 99
+
+   38 for_stmt: TFOR TIDENT TASSIGN . expr TTO expr TDO statement
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    expr           go to state 130
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 100
+
+   48 write_args: TSTRING .
+
+    $default  reduce using rule 48 (write_args)
+
+
+State 101
+
+   41 write_stmt: TWRITE TLPAREN write_args_opt . TRPAREN
+
+    TRPAREN  shift, and go to state 131
+
+
+State 102
+
+   46 write_args_opt: write_args .
+   49 write_args: write_args . TCOMMA expr
+   50           | write_args . TCOMMA TSTRING
+
+    TCOMMA  shift, and go to state 132
+
+    $default  reduce using rule 46 (write_args_opt)
+
+
+State 103
+
+   47 write_args: expr .
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+    $default  reduce using rule 47 (write_args)
+
+
+State 104
+
+   42 write_stmt: TWRITELN TLPAREN write_args_opt . TRPAREN
+
+    TRPAREN  shift, and go to state 133
+
+
+State 105
+
+   34 assignment_stmt: TIDENT TASSIGN expr .
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+    $default  reduce using rule 34 (assignment_stmt)
+
+
+State 106
+
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+   81 expr_list: expr .
+
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+    $default  reduce using rule 81 (expr_list)
+
+
+State 107
+
+   78 function_call: TIDENT TLPAREN expr_list_opt . TRPAREN
+
+    TRPAREN  shift, and go to state 134
+
+
+State 108
+
+   80 expr_list_opt: expr_list .
+   82 expr_list: expr_list . TCOMMA expr
+
+    TCOMMA  shift, and go to state 135
+
+    $default  reduce using rule 80 (expr_list_opt)
+
+
+State 109
+
+   25 stmt_list: stmt_list TSEMI statement .
+
+    $default  reduce using rule 25 (stmt_list)
+
+
+State 110
+
+   17 param_list: TIDENT . TCOLON type_spec
+
+    TCOLON  shift, and go to state 136
+
+
+State 111
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN params_opt . TRPAREN TSEMI local_vars_opt compound_stmt TSEMI
+
+    TRPAREN  shift, and go to state 137
+
+
+State 112
+
+   16 params_opt: param_list .
+   18 param_list: param_list . TCOMMA TIDENT TCOLON type_spec
+
+    TCOMMA  shift, and go to state 138
+
+    $default  reduce using rule 16 (params_opt)
+
+
+State 113
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt . TRPAREN TCOLON type_spec TSEMI local_vars_opt compound_stmt TSEMI
+
+    TRPAREN  shift, and go to state 139
+
+
+State 114
+
+   77 factor: TLPAREN expr TRPAREN .
+
+    $default  reduce using rule 77 (factor)
+
+
+State 115
+
+   35 if_stmt: TIF expr TTHEN statement .
+   36        | TIF expr TTHEN statement . TELSE statement
+
+    TELSE  shift, and go to state 140
+
+    $default  reduce using rule 35 (if_stmt)
+
+
+State 116
+
+   52 expr: expr TAND relation .
+
+    $default  reduce using rule 52 (expr)
+
+
+State 117
+
+   51 expr: expr TOR relation .
+
+    $default  reduce using rule 51 (expr)
+
+
+State 118
+
+   55 relation: arith TNE arith .
+   61 arith: arith . TPLUS term
+   62      | arith . TMINUS term
+
+    TPLUS   shift, and go to state 93
+    TMINUS  shift, and go to state 94
+
+    $default  reduce using rule 55 (relation)
+
+
+State 119
+
+   57 relation: arith TLE arith .
+   61 arith: arith . TPLUS term
+   62      | arith . TMINUS term
+
+    TPLUS   shift, and go to state 93
+    TMINUS  shift, and go to state 94
+
+    $default  reduce using rule 57 (relation)
+
+
+State 120
+
+   59 relation: arith TGE arith .
+   61 arith: arith . TPLUS term
+   62      | arith . TMINUS term
+
+    TPLUS   shift, and go to state 93
+    TMINUS  shift, and go to state 94
+
+    $default  reduce using rule 59 (relation)
+
+
+State 121
+
+   56 relation: arith TLT arith .
+   61 arith: arith . TPLUS term
+   62      | arith . TMINUS term
+
+    TPLUS   shift, and go to state 93
+    TMINUS  shift, and go to state 94
+
+    $default  reduce using rule 56 (relation)
+
+
+State 122
+
+   58 relation: arith TGT arith .
+   61 arith: arith . TPLUS term
+   62      | arith . TMINUS term
+
+    TPLUS   shift, and go to state 93
+    TMINUS  shift, and go to state 94
+
+    $default  reduce using rule 58 (relation)
+
+
+State 123
+
+   54 relation: arith TEQ arith .
+   61 arith: arith . TPLUS term
+   62      | arith . TMINUS term
+
+    TPLUS   shift, and go to state 93
+    TMINUS  shift, and go to state 94
+
+    $default  reduce using rule 54 (relation)
+
+
+State 124
+
+   61 arith: arith TPLUS term .
+   64 term: term . TMUL unary
+   65     | term . TDIV unary
+   66     | term . TMOD unary
+
+    TDIV  shift, and go to state 95
+    TMOD  shift, and go to state 96
+    TMUL  shift, and go to state 97
+
+    $default  reduce using rule 61 (arith)
+
+
+State 125
+
+   62 arith: arith TMINUS term .
+   64 term: term . TMUL unary
+   65     | term . TDIV unary
+   66     | term . TMOD unary
+
+    TDIV  shift, and go to state 95
+    TMOD  shift, and go to state 96
+    TMUL  shift, and go to state 97
+
+    $default  reduce using rule 62 (arith)
+
+
+State 126
+
+   65 term: term TDIV unary .
+
+    $default  reduce using rule 65 (term)
+
+
+State 127
+
+   66 term: term TMOD unary .
+
+    $default  reduce using rule 66 (term)
+
+
+State 128
+
+   64 term: term TMUL unary .
+
+    $default  reduce using rule 64 (term)
+
+
+State 129
+
+   37 while_stmt: TWHILE expr TDO statement .
+
+    $default  reduce using rule 37 (while_stmt)
+
+
+State 130
+
+   38 for_stmt: TFOR TIDENT TASSIGN expr . TTO expr TDO statement
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TTO   shift, and go to state 141
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+
+State 131
+
+   41 write_stmt: TWRITE TLPAREN write_args_opt TRPAREN .
+
+    $default  reduce using rule 41 (write_stmt)
+
+
+State 132
+
+   49 write_args: write_args TCOMMA . expr
+   50           | write_args TCOMMA . TSTRING
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+    TSTRING  shift, and go to state 142
+
+    expr           go to state 143
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 133
+
+   42 write_stmt: TWRITELN TLPAREN write_args_opt TRPAREN .
+
+    $default  reduce using rule 42 (write_stmt)
+
+
+State 134
+
+   78 function_call: TIDENT TLPAREN expr_list_opt TRPAREN .
+
+    $default  reduce using rule 78 (function_call)
+
+
+State 135
+
+   82 expr_list: expr_list TCOMMA . expr
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    expr           go to state 144
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 136
+
+   17 param_list: TIDENT TCOLON . type_spec
+
+    TINTEGER  shift, and go to state 25
+    TBOOLEAN  shift, and go to state 26
+
+    type_spec  go to state 145
+
+
+State 137
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN params_opt TRPAREN . TSEMI local_vars_opt compound_stmt TSEMI
+
+    TSEMI  shift, and go to state 146
+
+
+State 138
+
+   18 param_list: param_list TCOMMA . TIDENT TCOLON type_spec
+
+    TIDENT  shift, and go to state 147
+
+
+State 139
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN . TCOLON type_spec TSEMI local_vars_opt compound_stmt TSEMI
+
+    TCOLON  shift, and go to state 148
+
+
+State 140
+
+   36 if_stmt: TIF expr TTHEN statement TELSE . statement
+
+    TBEGIN    shift, and go to state 17
+    TIF       shift, and go to state 29
+    TWHILE    shift, and go to state 30
+    TFOR      shift, and go to state 31
+    TRETURN   shift, and go to state 32
+    TWRITE    shift, and go to state 33
+    TWRITELN  shift, and go to state 34
+    TIDENT    shift, and go to state 35
+
+    compound_stmt    go to state 36
+    statement        go to state 149
+    assignment_stmt  go to state 40
+    if_stmt          go to state 41
+    while_stmt       go to state 42
+    for_stmt         go to state 43
+    return_stmt      go to state 44
+    write_stmt       go to state 45
+    expr_stmt        go to state 46
+    function_call    go to state 47
+
+
+State 141
+
+   38 for_stmt: TFOR TIDENT TASSIGN expr TTO . expr TDO statement
+
+    TTRUE    shift, and go to state 53
+    TFALSE   shift, and go to state 54
+    TNOT     shift, and go to state 55
+    TLPAREN  shift, and go to state 56
+    TPLUS    shift, and go to state 57
+    TMINUS   shift, and go to state 58
+    TINTLIT  shift, and go to state 59
+    TIDENT   shift, and go to state 60
+
+    expr           go to state 150
+    relation       go to state 62
+    arith          go to state 63
+    term           go to state 64
+    unary          go to state 65
+    factor         go to state 66
+    function_call  go to state 67
+
+
+State 142
+
+   50 write_args: write_args TCOMMA TSTRING .
+
+    $default  reduce using rule 50 (write_args)
+
+
+State 143
+
+   49 write_args: write_args TCOMMA expr .
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+    $default  reduce using rule 49 (write_args)
+
+
+State 144
+
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+   82 expr_list: expr_list TCOMMA expr .
+
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+    $default  reduce using rule 82 (expr_list)
+
+
+State 145
+
+   17 param_list: TIDENT TCOLON type_spec .
+
+    $default  reduce using rule 17 (param_list)
+
+
+State 146
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN params_opt TRPAREN TSEMI . local_vars_opt compound_stmt TSEMI
+
+    TVAR  shift, and go to state 6
+
+    $default  reduce using rule 13 (local_vars_opt)
+
+    var_sections    go to state 151
+    local_vars_opt  go to state 152
+
+
+State 147
+
+   18 param_list: param_list TCOMMA TIDENT . TCOLON type_spec
+
+    TCOLON  shift, and go to state 153
+
+
+State 148
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN TCOLON . type_spec TSEMI local_vars_opt compound_stmt TSEMI
+
+    TINTEGER  shift, and go to state 25
+    TBOOLEAN  shift, and go to state 26
+
+    type_spec  go to state 154
+
+
+State 149
+
+   36 if_stmt: TIF expr TTHEN statement TELSE statement .
+
+    $default  reduce using rule 36 (if_stmt)
+
+
+State 150
+
+   38 for_stmt: TFOR TIDENT TASSIGN expr TTO expr . TDO statement
+   51 expr: expr . TOR relation
+   52     | expr . TAND relation
+
+    TDO   shift, and go to state 155
+    TAND  shift, and go to state 85
+    TOR   shift, and go to state 86
+
+
+State 151
+
+    5 var_sections: var_sections . TVAR var_decl_list
+   14 local_vars_opt: var_sections .
+
+    TVAR  shift, and go to state 13
+
+    $default  reduce using rule 14 (local_vars_opt)
+
+
+State 152
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN params_opt TRPAREN TSEMI local_vars_opt . compound_stmt TSEMI
+
+    TBEGIN  shift, and go to state 17
+
+    compound_stmt  go to state 156
+
+
+State 153
+
+   18 param_list: param_list TCOMMA TIDENT TCOLON . type_spec
+
+    TINTEGER  shift, and go to state 25
+    TBOOLEAN  shift, and go to state 26
+
+    type_spec  go to state 157
+
+
+State 154
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN TCOLON type_spec . TSEMI local_vars_opt compound_stmt TSEMI
+
+    TSEMI  shift, and go to state 158
+
+
+State 155
+
+   38 for_stmt: TFOR TIDENT TASSIGN expr TTO expr TDO . statement
+
+    TBEGIN    shift, and go to state 17
+    TIF       shift, and go to state 29
+    TWHILE    shift, and go to state 30
+    TFOR      shift, and go to state 31
+    TRETURN   shift, and go to state 32
+    TWRITE    shift, and go to state 33
+    TWRITELN  shift, and go to state 34
+    TIDENT    shift, and go to state 35
+
+    compound_stmt    go to state 36
+    statement        go to state 159
+    assignment_stmt  go to state 40
+    if_stmt          go to state 41
+    while_stmt       go to state 42
+    for_stmt         go to state 43
+    return_stmt      go to state 44
+    write_stmt       go to state 45
+    expr_stmt        go to state 46
+    function_call    go to state 47
+
+
+State 156
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN params_opt TRPAREN TSEMI local_vars_opt compound_stmt . TSEMI
+
+    TSEMI  shift, and go to state 160
+
+
+State 157
+
+   18 param_list: param_list TCOMMA TIDENT TCOLON type_spec .
+
+    $default  reduce using rule 18 (param_list)
+
+
+State 158
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN TCOLON type_spec TSEMI . local_vars_opt compound_stmt TSEMI
+
+    TVAR  shift, and go to state 6
+
+    $default  reduce using rule 13 (local_vars_opt)
+
+    var_sections    go to state 151
+    local_vars_opt  go to state 161
+
+
+State 159
+
+   38 for_stmt: TFOR TIDENT TASSIGN expr TTO expr TDO statement .
+
+    $default  reduce using rule 38 (for_stmt)
+
+
+State 160
+
+   12 procedure_decl: TPROCEDURE TIDENT TLPAREN params_opt TRPAREN TSEMI local_vars_opt compound_stmt TSEMI .
+
+    $default  reduce using rule 12 (procedure_decl)
+
+
+State 161
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN TCOLON type_spec TSEMI local_vars_opt . compound_stmt TSEMI
+
+    TBEGIN  shift, and go to state 17
+
+    compound_stmt  go to state 162
+
+
+State 162
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN TCOLON type_spec TSEMI local_vars_opt compound_stmt . TSEMI
+
+    TSEMI  shift, and go to state 163
+
+
+State 163
+
+   11 function_decl: TFUNCTION TIDENT TLPAREN params_opt TRPAREN TCOLON type_spec TSEMI local_vars_opt compound_stmt TSEMI .
+
+    $default  reduce using rule 11 (function_decl)
