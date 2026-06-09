@@ -3,7 +3,7 @@
 ## Equipe
 - Cesar José Santana
 - João Alfredo
-- Leonardo de Souza
+
 
 ## Visão geral
 Este projeto implementa um compilador de brinquedo para uma linguagem **Mini-Pascal** em Linux, usando:
